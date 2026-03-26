@@ -144,39 +144,35 @@
             /* [공통] 인쇄 시 웹 UI 통째로 숨김 */
             #web-area { display: none !important; }
 
-            /* 1. 일정표 인쇄 */
+            /* 1. 일정표 인쇄 (자연스러운 꽉참을 위해 억지 높이 지정 해제) */
             body.print-itinerary #print-area { 
-                display: flex !important; 
-                flex-direction: column !important;
+                display: block !important; 
                 width: 100% !important;
-                height: 280mm !important;
-                box-sizing: border-box !important;
-                overflow: hidden !important;
+                margin: 0 auto !important;
             }
             body.print-itinerary #print-checklist-area { display: none !important; }
             
             #print-area table { 
-                flex-grow: 1 !important; 
                 border-collapse: collapse !important; 
                 width: 100% !important; 
                 border: 2px solid #000 !important; 
                 table-layout: fixed !important; 
-                margin-top: 10px !important;
-                margin-bottom: 10px !important;
+                margin-top: 15px !important;
+                margin-bottom: 20px !important;
             }
             #print-area th, #print-area td { 
                 border: 1px solid #4b5563 !important; 
                 color: #000 !important; 
                 word-break: keep-all !important; 
-                padding: 5px 6px !important;
+                padding: 14px 10px !important; /* 위아래 여백을 적절히 주어 빈공간 없이 자연스럽게 채움 */
                 vertical-align: middle !important;
-                font-size: 10pt !important;
-                line-height: 1.4 !important;
+                font-size: 10.5pt !important;
+                line-height: 1.6 !important;
             }
-            #print-area th { background-color: #f3f4f6 !important; border-bottom: 2px solid #000 !important; font-size: 11pt !important; }
-            .highlight-print { font-weight: bold; font-size: 10.5pt; }
-            .print-include-box { padding: 6px !important; margin-bottom: 6px !important; }
-            .print-include-box p { margin: 2px 0 !important; font-size: 9.5pt !important; }
+            #print-area th { background-color: #f3f4f6 !important; border-bottom: 2px solid #000 !important; font-size: 11.5pt !important; padding: 10px !important; }
+            .highlight-print { font-weight: bold; font-size: 11pt; }
+            .print-include-box { padding: 12px !important; margin-bottom: 8px !important; border-radius: 8px !important; }
+            .print-include-box p { margin: 4px 0 !important; font-size: 10pt !important; }
 
             /* 2. 준비물 인쇄 */
             body.print-checklist #print-area { display: none !important; }
@@ -707,11 +703,11 @@
             <tbody>
                 <!-- 1일차 -->
                 <tr>
-                    <td class="border border-gray-400 p-2 text-center highlight-print">제1일<br><span class="text-[9pt] font-normal">4/7(화)~8(수)</span></td>
+                    <td class="border border-gray-400 p-2 text-center highlight-print">제1일<br><span class="text-[9.5pt] font-normal">4/7(화)~8(수)</span></td>
                     <td class="border border-gray-400 p-2 text-center highlight-print">태백<br>인천<br>나트랑</td>
-                    <td class="border border-gray-400 p-2 text-center text-[10pt]">VJ835<br>전용차량<br><span class="text-[9pt] font-bold">06:45-09:35</span></td>
+                    <td class="border border-gray-400 p-2 text-center text-[10.5pt]">VJ835<br>전용차량<br><span class="text-[9.5pt] font-bold">06:45-09:35</span></td>
                     <td class="border border-gray-400 p-2">
-                        <ul class="list-disc pl-4 space-y-1 text-[10pt]">
+                        <ul class="list-disc pl-4 space-y-2 text-[10.5pt]">
                             <li><strong class="text-blue-700">[4/7 23:30] 태백 배달식육식당 앞 집결 및 출발</strong></li>
                             <li>인천 국제공항 출발 ➔ 나트랑 깜란 국제공항 도착 후 가이드 미팅</li>
                             <li>참파 유적지 중 가장 오래된 <strong>포나가르 탑</strong> 관광</li>
@@ -719,41 +715,41 @@
                             <li><strong class="text-red-600">베트남 전통 마사지 120분</strong> (팁 $5 별도) 후 호텔 휴식</li>
                         </ul>
                     </td>
-                    <td class="border border-gray-400 p-2 text-center text-[10pt] leading-tight">
+                    <td class="border border-gray-400 p-2 text-center text-[10.5pt] leading-relaxed">
                         <span class="text-gray-500">조: 불포함</span><br>
                         <strong>중: 쌀국수정식</strong><br>
                         <strong class="text-blue-600">석: 씨푸드뷔페+랍스터</strong><br>
-                        <span class="text-gray-800 font-bold block mt-1 text-[9pt]">호라이즌 호텔</span>
+                        <span class="text-gray-800 font-bold block mt-2 pt-1 border-t border-dashed border-gray-400 text-[10pt]">호라이즌 호텔</span>
                     </td>
                 </tr>
                 <!-- 2일차 -->
                 <tr>
-                    <td class="border border-gray-400 p-2 text-center highlight-print">제2일<br><span class="text-[9pt] font-normal">4/9(목)</span></td>
+                    <td class="border border-gray-400 p-2 text-center highlight-print">제2일<br><span class="text-[9.5pt] font-normal">4/9(목)</span></td>
                     <td class="border border-gray-400 p-2 text-center highlight-print">나트랑</td>
-                    <td class="border border-gray-400 p-2 text-center text-[10pt]">전용차량<br>스피드보트</td>
+                    <td class="border border-gray-400 p-2 text-center text-[10.5pt]">전용차량<br>스피드보트</td>
                     <td class="border border-gray-400 p-2">
-                        <ul class="list-disc pl-4 space-y-1 text-[10pt]">
+                        <ul class="list-disc pl-4 space-y-2 text-[10.5pt]">
                             <li><strong>에메랄드빛 호핑투어:</strong> 선착장 이동 후 스피드보트로 목선 탑승</li>
                             <li>스노클링, 낚시, 오션바, 다이빙, 무제한 맥주 & 망고 제공</li>
-                            <li><span class="text-gray-600 text-[9pt]">(※해양스포츠는 옵션: 바나나보트, 패러세일링 등)</span></li>
+                            <li><span class="text-gray-600 text-[9.5pt]">(※해양스포츠는 옵션: 바나나보트, 패러세일링 등)</span></li>
                             <li><strong>나트랑 나이트 투어:</strong> 씨클로 탑승, 야시장, 피자+맥주 체험</li>
                             <li>호텔 이동 후 체크인 및 휴식</li>
                         </ul>
                     </td>
-                    <td class="border border-gray-400 p-2 text-center text-[10pt] leading-tight">
+                    <td class="border border-gray-400 p-2 text-center text-[10.5pt] leading-relaxed">
                         <strong>조: 호텔식</strong><br>
                         <strong>중: 호핑식</strong><br>
                         <strong class="text-red-600">석: 무제한삼겹살</strong><br>
-                        <span class="text-gray-800 font-bold block mt-1 text-[9pt]">호라이즌 호텔</span>
+                        <span class="text-gray-800 font-bold block mt-2 pt-1 border-t border-dashed border-gray-400 text-[10pt]">호라이즌 호텔</span>
                     </td>
                 </tr>
                 <!-- 3일차 -->
                 <tr>
-                    <td class="border border-gray-400 p-2 text-center highlight-print">제3일<br><span class="text-[9pt] font-normal">4/10(금)</span></td>
+                    <td class="border border-gray-400 p-2 text-center highlight-print">제3일<br><span class="text-[9.5pt] font-normal">4/10(금)</span></td>
                     <td class="border border-gray-400 p-2 text-center highlight-print">나트랑<br>달랏</td>
-                    <td class="border border-gray-400 p-2 text-center text-[10pt]">전용차량</td>
+                    <td class="border border-gray-400 p-2 text-center text-[10.5pt]">전용차량</td>
                     <td class="border border-gray-400 p-2">
-                        <ul class="list-disc pl-4 space-y-1 text-[10pt]">
+                        <ul class="list-disc pl-4 space-y-2 text-[10.5pt]">
                             <li>조식 후 체크아웃 및 가이드 미팅. 달랏으로 이동 (약 3.5시간)</li>
                             <li>화려한 색감의 <strong>린푸옥 사원</strong> 및 달랏 최대 <strong>죽림사</strong>(케이블카 편도)</li>
                             <li>베트남 최고 명소 <strong>다탄라 폭포</strong> (레일바이크 탑승)</li>
@@ -761,20 +757,20 @@
                             <li>화려하고 활기 넘치는 <strong>달랏 최대 야시장</strong> 관광. 호텔 이동 및 휴식</li>
                         </ul>
                     </td>
-                    <td class="border border-gray-400 p-2 text-center text-[10pt] leading-tight">
+                    <td class="border border-gray-400 p-2 text-center text-[10.5pt] leading-relaxed">
                         <strong>조: 호텔식</strong><br>
                         <strong>중: 샤브샤브</strong><br>
                         <strong class="text-red-600">석: 장어무제한</strong><br>
-                        <span class="text-gray-800 font-bold block mt-1 text-[9pt]">라달랏 호텔</span>
+                        <span class="text-gray-800 font-bold block mt-2 pt-1 border-t border-dashed border-gray-400 text-[10pt]">라달랏 호텔</span>
                     </td>
                 </tr>
                 <!-- 4~5일차 -->
                 <tr>
-                    <td class="border border-gray-400 p-2 text-center highlight-print">제4~5일<br><span class="text-[9pt] font-normal">4/11~12</span></td>
+                    <td class="border border-gray-400 p-2 text-center highlight-print">제4~5일<br><span class="text-[9.5pt] font-normal">4/11~12</span></td>
                     <td class="border border-gray-400 p-2 text-center highlight-print">달랏<br>나트랑<br>인천</td>
-                    <td class="border border-gray-400 p-2 text-center text-[10pt]">전용차량<br>VJ834<br><span class="text-[9pt] font-bold">22:55-05:35</span></td>
+                    <td class="border border-gray-400 p-2 text-center text-[10.5pt]">전용차량<br>VJ834<br><span class="text-[9.5pt] font-bold">22:55-05:35</span></td>
                     <td class="border border-gray-400 p-2">
-                        <ul class="list-disc pl-4 space-y-1 text-[10pt]">
+                        <ul class="list-disc pl-4 space-y-2 text-[10.5pt]">
                             <li>비단실의 아름다운 작품 세계 <strong>달랏 자수 박물관</strong> 관광</li>
                             <li>나트랑 이동 (약 3.5시간). 가장 오래된 사원 <strong>롱손사</strong> 관광</li>
                             <li>순전히 돌로 지어진 유럽풍의 <strong>나트랑 대성당</strong> (차창관광)</li>
@@ -782,11 +778,11 @@
                             <li>석식 후 나트랑 깜란 공항 이동 ➔ 인천국제공항 무사 도착</li>
                         </ul>
                     </td>
-                    <td class="border border-gray-400 p-2 text-center text-[10pt] leading-tight">
+                    <td class="border border-gray-400 p-2 text-center text-[10.5pt] leading-relaxed">
                         <strong>조: 호텔식</strong><br>
                         <strong>중: 분짜+반세오</strong><br>
                         <strong>석: 닭볶음탕+오징어</strong><br>
-                        <span class="text-gray-500 block mt-1 text-[9pt]">(익일 조식 기내식)</span>
+                        <span class="text-gray-500 block mt-2 pt-1 border-t border-dashed border-gray-400 text-[9.5pt]">(익일 조식 기내식)</span>
                     </td>
                 </tr>
             </tbody>
