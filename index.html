@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나트랑 & 달랏 3박 5일 힐링투어 - 스마트 가이드북</title>
+    
+    <!-- Open Graph (카카오톡/링크 공유 시 썸네일) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="[VIP] 나트랑 & 달랏 3박 5일 힐링투어">
+    <meta property="og:description" content="베트남의 지중해와 영원한 봄의 도시 달랏! 완벽한 힐링 여정을 위한 여행 준비물과 일정을 확인하세요.">
+    <!-- 썸네일: 나트랑/달랏 테마의 고화질 이미지 적용 -->
+    <meta property="og:image" content="https://tse1.mm.bing.net/th/id/OIP.3RZfifDIp4OrKlaWMRdXXAHaEo?w=474&h=474&c=7&p=0">
+    <meta property="og:site_name" content="투어메이커">
+
+    <!-- Google Analytics (GA4) 탑재 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JLH9GD9SVR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      // 투어메이커 기본 GA4 측정 ID
+      gtag('config', 'G-JLH9GD9SVR');
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Leaflet Map CSS (지도 라이브러리) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow-x: hidden;
+            word-break: keep-all;
+            background-color: #f8fafc;
+        }
+        .font-serif { font-family: 'Noto Serif KR', serif; }
+        
+        /* 메인 배경 (나트랑 해변 테마) */
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('https://tse3.mm.bing.net/th/id/OIP.XT_jrm8ZvdmAaz8vUyk7JwHaE8?w=474&h=474&c=7&p=0');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .text-shadow { text-shadow: 2px 2px 4px rgba(0,0,0,0.7); }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        .section-title::after {
+            content: ''; position: absolute; bottom: -10px; left: 0; width: 40px; height: 3px; background-color: #3b82f6; /* 파란색 포인트 */
+        }
+        
+        /* 비디오 */
+        .video-wrapper {
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 0.5rem; background-color: #000; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .video-wrapper iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        }
+
+        /* 체크리스트 디자인 */
+        .check-item { transition: all 0.2s; }
+        .check-item:hover { background-color: #f1f5f9; }
+        input[type="checkbox"]:checked + div span.font-bold { text-decoration: line-through; color: #94a3b8; }
+
+        /* Floating Badge Animation */
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .d-day-badge { animation: pulse-border 2s infinite; }
+
+        /* 동선 요약 화살표 애니메이션 */
+        .route-arrow { animation: moveRight 1.5s infinite ease-in-out; }
+        @keyframes moveRight {
+            0% { transform: translateX(0); opacity: 0.5; }
+            50% { transform: translateX(5px); opacity: 1; }
+            100% { transform: translateX(0); opacity: 0.5; }
+        }
+
+        /* 커스텀 맵 마커 아이콘 스타일 */
+        .custom-map-marker {
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            border: 2px solid #3b82f6;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            width: 32px !important;
+            height: 32px !important;
+        }
+        .custom-map-marker.hotel { border-color: #f59e0b; background-color: #fffbeb; }
+        .custom-map-marker.airport { border-color: #6b7280; }
+
+        /* 지도 탭 활성화 상태 */
+        .map-tab.active {
+            background-color: #1e3a8a;
+            color: white;
+            border-color: #1e3a8a;
+        }
+
+        /* =========================================================
+           [A4 1장 인쇄 전용 CSS - JS로 분기 처리] 
+           ========================================================= */
+        @media screen {
+            #print-area, #print-checklist-area { display: none !important; }
+        }
+
+        @media print {
+            @page {
+                size: A4 portrait; 
+                margin: 8mm;
+            }
+            html, body {
+                background-color: white !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            /* [공통] 인쇄 시 웹 UI 통째로 숨김 */
+            #web-area { display: none !important; }
+
+            /* 1. 일정표 인쇄 */
+            body.print-itinerary #print-area { 
+                display: flex !important; 
+                flex-direction: column !important;
+                width: 100% !important;
+                height: 280mm !important;
+                box-sizing: border-box !important;
+                overflow: hidden !important;
+            }
+            body.print-itinerary #print-checklist-area { display: none !important; }
+            
+            #print-area table { 
+                flex-grow: 1 !important; 
+                border-collapse: collapse !important; 
+                width: 100% !important; 
+                border: 2px solid #000 !important; 
+                table-layout: fixed !important; 
+                margin-top: 10px !important;
+                margin-bottom: 10px !important;
+            }
+            #print-area th, #print-area td { 
+                border: 1px solid #4b5563 !important; 
+                color: #000 !important; 
+                word-break: keep-all !important; 
+                padding: 5px 6px !important;
+                vertical-align: middle !important;
+                font-size: 10pt !important;
+                line-height: 1.4 !important;
+            }
+            #print-area th { background-color: #f3f4f6 !important; border-bottom: 2px solid #000 !important; font-size: 11pt !important; }
+            .highlight-print { font-weight: bold; font-size: 10.5pt; }
+            .print-include-box { padding: 6px !important; margin-bottom: 6px !important; }
+            .print-include-box p { margin: 2px 0 !important; font-size: 9.5pt !important; }
+
+            /* 2. 준비물 인쇄 */
+            body.print-checklist #print-area { display: none !important; }
+            body.print-checklist #print-checklist-area { 
+                display: block !important; 
+                width: 100% !important;
+                height: 280mm !important;
+                box-sizing: border-box !important;
+            }
+            
+            .chk-print-table { width: 100%; border-collapse: collapse; margin-top: 15px; border: 2px solid #000; }
+            .chk-print-table th, .chk-print-table td { border: 1px solid #000; padding: 10px; font-size: 11pt; line-height: 1.5; }
+            .chk-print-table th { background-color: #e5e7eb !important; font-size: 12pt; font-weight: bold; text-align: center; }
+            .chk-box-print { display: inline-block; width: 18px; height: 18px; border: 2px solid #000; margin-right: 10px; vertical-align: middle; }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- [웹 화면 전용 영역 시작] -->
+    <div id="web-area">
+
+        <!-- Navigation -->
+        <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md shadow-sm transition-all duration-300">
+            <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+                
+                <div class="flex items-center gap-3">
+                    <a href="#" class="flex items-center">
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" alt="투어메이커 Logo" class="h-8 md:h-10 object-contain">
+                    </a>
+                    <div id="nav-dday-main" class="d-day-badge bg-blue-600 text-white font-black text-[11px] md:text-sm px-3 py-1.5 rounded-full shadow-md whitespace-nowrap">
+                        D-DAY 계산중
+                    </div>
+                </div>
+                
+                <div class="hidden lg:flex space-x-5 font-bold text-gray-700 text-sm items-center">
+                    <a href="#prep" class="hover:text-blue-600 transition">여행준비</a>
+                    <a href="#route" class="hover:text-blue-600 transition">동선안내</a>
+                    <a href="#itinerary" class="hover:text-blue-600 transition">상세일정</a>
+                    <a href="#videos" class="hover:text-blue-600 transition">추천영상</a>
+                    <a href="tel:010-5115-6118" class="px-4 py-2 bg-[#006494] text-white rounded-full hover:bg-blue-800 transition shadow-md flex items-center gap-2">
+                        <i class="fas fa-phone-alt"></i> 담당자 직통
+                    </a>
+                </div>
+
+                <div class="lg:hidden flex items-center gap-3">
+                    <button class="text-gray-700 p-2" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="mobile-menu" class="hidden lg:hidden bg-white border-t">
+                <div class="flex flex-col p-4 space-y-3 font-medium">
+                    <a href="#prep" class="block text-gray-700 hover:bg-gray-50 p-2 rounded">체크리스트 & 준비물</a>
+                    <a href="#route" class="block text-gray-700 hover:bg-gray-50 p-2 rounded">전체/일자별 동선</a>
+                    <a href="#itinerary" class="block text-gray-700 hover:bg-gray-50 p-2 rounded">일정 자세히 보기</a>
+                    <a href="#videos" class="block text-gray-700 hover:bg-gray-50 p-2 rounded">추천 영상</a>
+                    <a href="tel:010-5115-6118" class="block text-white font-bold bg-[#006494] p-3 rounded-lg text-center shadow-md mt-2">
+                        <i class="fas fa-phone mr-2"></i> 김효돈 대표 연결
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <header class="hero-bg h-screen flex flex-col items-center justify-center text-center px-4 relative pt-10">
+            <div class="text-white z-10 w-full max-w-4xl" data-aos="fade-up">
+                <div class="inline-block border border-blue-400 rounded-full px-5 py-1.5 mb-5 bg-black/40 backdrop-blur-sm">
+                    <span class="text-blue-300 font-bold tracking-wider text-sm md:text-base">VIP 힐링 명품 투어 (17+1분)</span>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-light mb-2 text-white font-serif">베트남의 지중해 & 영원한 봄의 도시</h2>
+                <h1 class="text-5xl md:text-7xl font-black mb-6 text-shadow leading-tight font-serif">
+                    나트랑 & 달랏<br><span class="text-blue-400">3박 5일</span> 힐링 투어
+                </h1>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 justify-center mt-8 max-w-3xl mx-auto">
+                    <div class="bg-white/20 backdrop-blur-md p-3 rounded-lg border border-white/30 shadow-lg">
+                        <i class="far fa-calendar-check text-2xl mb-1 text-blue-300"></i>
+                        <span class="block text-xs text-gray-200">일정</span>
+                        <span class="font-bold text-sm md:text-base">4/8(화) ~ 4/12(토)</span>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-md p-3 rounded-lg border border-white/30 shadow-lg">
+                        <i class="fas fa-plane-departure text-2xl mb-1 text-sky-300"></i>
+                        <span class="block text-xs text-gray-200">항공 (베트남항공)</span>
+                        <span class="font-bold text-sm md:text-base">VN441 / VN440</span>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-md p-3 rounded-lg border border-white/30 shadow-lg">
+                        <i class="fas fa-hotel text-2xl mb-1 text-teal-300"></i>
+                        <span class="block text-xs text-gray-200">숙박 (5성급)</span>
+                        <span class="font-bold text-[11px] md:text-sm">호라이즌 / 라달랏</span>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-md p-3 rounded-lg border border-white/30 shadow-lg">
+                        <i class="fas fa-spa text-2xl mb-1 text-pink-300"></i>
+                        <span class="block text-xs text-gray-200">핵심 포인트</span>
+                        <span class="font-bold text-sm md:text-base">마사지 2회/특식/호핑</span>
+                    </div>
+                </div>
+
+                <div class="mt-12 animate-bounce">
+                    <a href="#prep" class="text-white text-3xl opacity-80 hover:opacity-100 transition"><i class="fas fa-chevron-down"></i></a>
+                </div>
+            </div>
+        </header>
+
+        <!-- 스마트 준비물 & 메모장 Section -->
+        <section id="prep" class="py-16 bg-white border-b border-gray-100">
+            <div class="container mx-auto px-4 max-w-5xl">
+                <div class="text-center mb-10" data-aos="fade-up">
+                    <h2 class="text-3xl font-bold text-gray-900 section-title">여행 준비 가이드</h2>
+                    <p class="text-gray-600 mt-2 font-medium">나트랑과 달랏의 상반된 날씨를 고려한 짐싸기가 필수입니다!</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- 날씨, 기본정보 및 가이드 연락처 -->
+                    <div class="flex flex-col gap-6" data-aos="fade-up" data-aos-delay="100">
+                        <div class="bg-blue-50 p-6 rounded-2xl shadow-sm border border-blue-100 flex-grow">
+                            <h3 class="font-bold text-xl mb-4 text-blue-900 flex items-center"><i class="fas fa-cloud-sun text-2xl mr-2 text-blue-500"></i> 날씨 및 준비 정보</h3>
+                            <ul class="space-y-3 text-sm text-gray-700">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-sun mt-1 text-orange-500 w-4"></i>
+                                    <div><strong>나트랑 날씨:</strong> 평균 25℃ ~ 32℃<br><span class="text-xs text-gray-500">전형적인 여름 날씨, 자외선이 매우 강합니다.</span></div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-leaf mt-1 text-green-500 w-4"></i>
+                                    <div><strong>달랏 날씨:</strong> 평균 15℃ ~ 24℃<br><span class="text-xs text-red-500 font-bold">고산지대로 아침/저녁이 쌀쌀합니다. 겉옷(가디건/바람막이) 필수!</span></div>
+                                </li>
+                                <li class="flex items-start gap-2 border-t border-blue-200 pt-3 mt-3">
+                                    <i class="fas fa-swimmer mt-1 text-blue-600 w-4"></i>
+                                    <div class="text-blue-800 font-bold">물놀이 복장 필수<br><span class="text-xs text-gray-600 font-normal">머드 온천 및 호핑투어 시 래쉬가드/수영복 필요</span></div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-passport mt-1 text-gray-600 w-4"></i>
+                                    <div><strong>비자:</strong> 한국인 45일 무비자 가능<br><span class="text-xs text-gray-500">여권 만료일 6개월 이상 반드시 확인</span></div>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 가이드 비상 연락처 -->
+                        <div class="bg-gray-800 p-5 rounded-2xl shadow-sm text-white">
+                            <h3 class="font-bold text-lg mb-3 flex items-center text-yellow-400"><i class="fas fa-user-headset mr-2"></i> 비상 연락망</h3>
+                            <div class="text-sm space-y-3">
+                                <div class="bg-gray-700 p-3 rounded-lg border border-gray-600">
+                                    <span class="text-xs text-gray-300 block mb-1">🇰🇷 한국 총괄 (우리 트래블)</span>
+                                    <span class="font-bold text-base">김효돈 대표</span> <br><span class="text-blue-300 tracking-wider text-sm">☎ 010-5115-6118</span>
+                                </div>
+                                <div class="bg-gray-700 p-3 rounded-lg border border-gray-600">
+                                    <span class="text-xs text-gray-300 block mb-1">🇻🇳 현지 한국인 가이드</span>
+                                    <span class="font-bold text-base">현지 배정 중</span> <br><span class="text-green-300 text-xs mt-1 block">출발 2~3일 전 최종 안내해 드립니다.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 인터랙티브 체크리스트 및 메모장 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 lg:col-span-2 flex flex-col" data-aos="fade-up" data-aos-delay="200">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-5 gap-3">
+                            <h3 class="font-bold text-xl flex items-center gap-2 text-gray-800">
+                                <i class="fas fa-check-square text-green-500 text-2xl"></i> 나트랑/달랏 짐싸기 필수품
+                            </h3>
+                            <button type="button" onclick="triggerPrintChecklist()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded shadow transition-colors flex items-center text-sm w-full sm:w-auto justify-center">
+                                <i class="fas fa-print mr-2"></i> 준비물 인쇄하기
+                            </button>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 mb-6">
+                            <label class="flex items-start gap-3 p-2.5 rounded-lg check-item cursor-pointer border border-transparent hover:border-gray-200">
+                                <input type="checkbox" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 checklist-cb mt-0.5" id="chk_doc">
+                                <div>
+                                    <span class="font-bold text-gray-800 block">여권 (만료일 6개월 이상)</span>
+                                    <span class="text-[13px] text-gray-500">가장 중요합니다. 서명란 본인 서명 필수</span>
+                                </div>
+                            </label>
+                            
+                            <label class="flex items-start gap-3 p-2.5 rounded-lg check-item cursor-pointer bg-blue-50 border border-blue-100">
+                                <input type="checkbox" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 checklist-cb mt-0.5" id="chk_swim">
+                                <div>
+                                    <span class="font-bold text-blue-800 block">수영복 또는 래쉬가드</span>
+                                    <span class="text-[13px] text-blue-600">머드 온천(1일차) 및 호핑투어(2일차) 필수 지참</span>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start gap-3 p-2.5 rounded-lg check-item cursor-pointer bg-red-50 border border-red-100">
+                                <input type="checkbox" class="w-5 h-5 text-red-600 rounded focus:ring-red-500 checklist-cb mt-0.5" id="chk_clothes">
+                                <div>
+                                    <span class="font-bold text-red-700 block">여름옷 & 가을용 겉옷(가디건)</span>
+                                    <span class="text-[13px] text-gray-600">나트랑은 덥고, 달랏은 아침저녁으로 서늘합니다.</span>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start gap-3 p-2.5 rounded-lg check-item cursor-pointer border border-transparent hover:border-gray-200">
+                                <input type="checkbox" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 checklist-cb mt-0.5" id="chk_money">
+                                <div>
+                                    <span class="font-bold text-gray-800 block">달러($) 및 베트남 동(VND)</span>
+                                    <span class="text-[13px] text-gray-500">매너팁(달러) / 야시장, 카페 등 개인경비용 환전</span>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start gap-3 p-2.5 rounded-lg check-item cursor-pointer border border-transparent hover:border-gray-200">
+                                <input type="checkbox" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 checklist-cb mt-0.5" id="chk_shoes">
+                                <div>
+                                    <span class="font-bold text-gray-800 block">운동화 & 아쿠아슈즈(샌들)</span>
+                                    <span class="text-[13px] text-gray-500">달랏 사원/전망대용 운동화 및 물놀이용 신발</span>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start gap-3 p-2.5 rounded-lg check-item cursor-pointer border border-transparent hover:border-gray-200">
+                                <input type="checkbox" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 checklist-cb mt-0.5" id="chk_sun">
+                                <div>
+                                    <span class="font-bold text-gray-800 block">자외선 차단 및 세면용품</span>
+                                    <span class="text-[13px] text-gray-500">선크림, 모자, 선글라스 / 개인 칫솔 세트 및 면도기</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- 큼직한 나만의 메모장 -->
+                        <div class="relative flex-grow flex flex-col">
+                            <label for="userMemo" class="block text-sm font-bold text-gray-700 mb-2 flex items-center">
+                                <i class="fas fa-pen-alt text-yellow-500 mr-2 text-lg"></i> 나만의 여행 메모 (자동 저장)
+                            </label>
+                            <textarea id="userMemo" rows="4" class="w-full flex-grow p-4 text-base border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition shadow-inner bg-yellow-50/50 resize-y min-h-[100px] leading-relaxed" placeholder="면세점 구입 품목, 쇼핑 리스트 등 잊지 않게 메모하세요."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 동선 안내 (Map) Section -->
+        <section id="route" class="py-16 bg-gray-50 border-b border-gray-200">
+            <div class="container mx-auto px-4 max-w-5xl">
+                <div class="text-center mb-8" data-aos="fade-up">
+                    <h2 class="text-3xl font-bold text-gray-900 section-title">한눈에 보는 여행 동선</h2>
+                    <p class="text-gray-600 mt-2 font-medium">나트랑에서 달랏으로 이어지는 일자별 이동 경로를 확인해 보세요.</p>
+                </div>
+
+                <div class="bg-white p-4 md:p-6 rounded-2xl shadow-lg border border-gray-200" data-aos="fade-up" data-aos-delay="100">
+                    
+                    <!-- 맵 컨트롤 탭 -->
+                    <div class="flex flex-wrap justify-center gap-2 mb-4">
+                        <button onclick="drawMapRoute('all')" class="map-tab active px-4 py-2 rounded-full border-2 border-gray-300 text-gray-700 font-bold text-sm hover:bg-gray-100 transition" id="tab-all">전체 여정</button>
+                        <button onclick="drawMapRoute('day1')" class="map-tab px-4 py-2 rounded-full border-2 border-gray-300 text-gray-700 font-bold text-sm hover:bg-gray-100 transition" id="tab-day1">1일차</button>
+                        <button onclick="drawMapRoute('day2')" class="map-tab px-4 py-2 rounded-full border-2 border-gray-300 text-gray-700 font-bold text-sm hover:bg-gray-100 transition" id="tab-day2">2일차</button>
+                        <button onclick="drawMapRoute('day3')" class="map-tab px-4 py-2 rounded-full border-2 border-gray-300 text-gray-700 font-bold text-sm hover:bg-gray-100 transition" id="tab-day3">3일차</button>
+                        <button onclick="drawMapRoute('day4')" class="map-tab px-4 py-2 rounded-full border-2 border-gray-300 text-gray-700 font-bold text-sm hover:bg-gray-100 transition" id="tab-day4">4일차</button>
+                    </div>
+
+                    <!-- 동선 요약 -->
+                    <div class="flex flex-wrap justify-center items-center gap-2 md:gap-4 text-xs md:text-sm font-bold mb-6 bg-blue-50 p-3 rounded-lg border border-blue-100">
+                        <span class="text-gray-700 bg-gray-200 px-3 py-1.5 rounded-full"><i class="fas fa-plane-arrival mr-1"></i> 깜란 공항</span>
+                        <i class="fas fa-angle-double-right text-gray-400 route-arrow"></i>
+                        <span class="text-blue-800 bg-blue-100 px-3 py-1.5 rounded-full"><i class="fas fa-water mr-1"></i> 나트랑 (1~2일차)</span>
+                        <i class="fas fa-angle-double-right text-gray-400 route-arrow"></i>
+                        <span class="text-green-800 bg-green-100 px-3 py-1.5 rounded-full"><i class="fas fa-mountain mr-1"></i> 달랏 (3~4일차)</span>
+                        <i class="fas fa-angle-double-right text-gray-400 route-arrow"></i>
+                        <span class="text-gray-700 bg-gray-200 px-3 py-1.5 rounded-full"><i class="fas fa-plane-departure mr-1"></i> 귀국</span>
+                    </div>
+
+                    <!-- Leaflet Map Container -->
+                    <div id="routeMap" class="w-full h-[350px] md:h-[500px] rounded-xl z-0 border border-gray-300"></div>
+                    
+                    <div class="mt-4 text-center bg-gray-50 p-3 rounded-lg border border-gray-200">
+                        <p id="mapSummaryText" class="font-bold text-blue-900 md:text-lg">전체 여정: 나트랑(휴양) ➔ 달랏(고산투어) ➔ 나트랑 공항</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 상세 일정표 Section -->
+        <section id="itinerary" class="py-16 bg-white">
+            <div class="container mx-auto px-4 max-w-4xl">
+                
+                <div class="flex flex-col md:flex-row justify-between items-center mb-12 border-b-2 border-gray-800 pb-4">
+                    <h2 class="text-2xl md:text-3xl font-black text-gray-900 flex items-center">
+                        <i class="fas fa-list-alt mr-3 text-blue-800"></i> 상세 일정표
+                    </h2>
+                    <button type="button" onclick="triggerPrintItinerary()" class="mt-4 md:mt-0 bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 px-6 rounded-lg shadow-md transition-colors flex items-center text-sm w-full md:w-auto justify-center">
+                        <i class="fas fa-print mr-2 text-lg"></i> 일정표 인쇄하기
+                    </button>
+                </div>
+
+                <!-- Day 1 -->
+                <div class="mb-12 bg-gray-50 p-6 md:p-8 rounded-2xl shadow-sm border border-gray-200" data-aos="fade-up">
+                    <div class="border-b border-gray-200 pb-3 mb-6">
+                        <div class="flex flex-wrap items-baseline gap-3">
+                            <h3 class="text-2xl font-black text-blue-800">제1일</h3>
+                            <span class="text-lg font-bold text-gray-700">4월 8일 (화)</span>
+                            <span class="text-sm font-medium text-gray-500 ml-auto bg-white px-3 py-1 rounded-full border border-gray-200">인천 ➔ 나트랑 도착</span>
+                        </div>
+                    </div>
+                    
+                    <ul class="space-y-6 relative border-l-2 border-gray-300 ml-3 pl-6 mb-6">
+                        <li class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-gray-50 shadow"></span>
+                            <div class="font-bold text-blue-600 text-sm mb-1">06:50 ~ 09:45</div>
+                            <h4 class="font-bold text-lg text-gray-900">인천 출발 ➔ 나트랑 깜란 공항 도착 (VN441)</h4>
+                            <p class="text-gray-600 text-sm mt-1">인천국제공항 출발. 나트랑 공항 도착 후 가이드 미팅 진행</p>
+                        </li>
+                        <li class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-gray-50 shadow"></span>
+                            <div class="font-bold text-blue-600 text-sm mb-1">오후 투어</div>
+                            <h4 class="font-bold text-lg text-gray-900">참파 유적지 & 머드 온천</h4>
+                            <p class="text-gray-600 text-sm mt-1">가장 오래된 참파 유적지 <strong>포나가르 탑</strong> 관광 후, 피로를 녹여줄 <strong>머드 온천</strong> 체험 <span class="text-red-500 text-xs">(※ 래쉬가드/수영복, 세면도구 지참 필수)</span></p>
+                        </li>
+                        <li class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-red-500 border-4 border-gray-50 shadow"></span>
+                            <div class="font-bold text-red-600 text-sm mb-1">힐링 포인트</div>
+                            <h4 class="font-bold text-lg text-gray-900">베트남 전통 마사지 120분</h4>
+                            <p class="text-gray-600 text-sm mt-1">전신 마사지 2시간으로 비행의 피로 회복 <span class="text-xs text-gray-500">(팁 $5 별도)</span>. 이후 석식 및 호텔 체크인</p>
+                        </li>
+                    </ul>
+                    
+                    <div class="bg-white p-4 rounded-lg flex flex-col md:flex-row gap-4 border border-gray-200 text-sm font-medium mt-4 shadow-sm">
+                        <div class="flex items-center text-orange-700"><i class="fas fa-utensils mr-2 w-4 text-center"></i> 중: 쌀국수정식 / 석: 씨푸드뷔페 (1인 랍스터 무제한)</div>
+                        <div class="flex items-center text-indigo-700 md:border-l md:border-gray-200 md:pl-4"><i class="fas fa-bed mr-2 w-4 text-center"></i> 호라이즌 호텔 또는 동급 (5성급)</div>
+                    </div>
+                </div>
+
+                <!-- Day 2 -->
+                <div class="mb-12 bg-gray-50 p-6 md:p-8 rounded-2xl shadow-sm border border-gray-200" data-aos="fade-up">
+                    <div class="border-b border-gray-200 pb-3 mb-6">
+                        <div class="flex flex-wrap items-baseline gap-3">
+                            <h3 class="text-2xl font-black text-blue-800">제2일</h3>
+                            <span class="text-lg font-bold text-gray-700">4월 9일 (수)</span>
+                            <span class="text-sm font-medium text-gray-500 ml-auto bg-white px-3 py-1 rounded-full border border-gray-200">나트랑 해양 스포츠 & 나이트투어</span>
+                        </div>
+                    </div>
+                    
+                    <ul class="space-y-6 relative border-l-2 border-gray-300 ml-3 pl-6 mb-6">
+                        <li class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-gray-50 shadow"></span>
+                            <div class="font-bold text-blue-600 text-sm mb-1">오전 일정</div>
+                            <h4 class="font-bold text-lg text-gray-900">에메랄드빛 나트랑 호핑투어</h4>
+                            <p class="text-gray-600 text-sm mt-1">선착장에서 스피드보트를 타고 목선으로 이동. 스노클링, 바다낚시, 오션바, 다이빙, 무제한 맥주 & 망고 제공! <span class="text-xs text-gray-500">(해양스포츠 바나나보트, 패러세일링은 선택 옵션)</span></p>
+                        </li>
+                        <li class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-indigo-500 border-4 border-gray-50 shadow"></span>
+                            <div class="font-bold text-indigo-600 text-sm mb-1">오후 & 야간 투어</div>
+                            <h4 class="font-bold text-lg text-gray-900">나트랑 나이트 투어</h4>
+                            <p class="text-gray-600 text-sm mt-1">현지 정취를 물씬 느낄 수 있는 씨클로 탑승, 나트랑 야시장 탐방. 피자와 맥주 한 잔의 여유 제공. 호텔 이동 후 휴식</p>
+                        </li>
+                    </ul>
+                    
+                    <div class="bg-white p-4 rounded-lg flex flex-col md:flex-row gap-4 border border-gray-200 text-sm font-medium mt-4 shadow-sm">
+                        <div class="flex items-center text-orange-700"><i class="fas fa-utensils mr-2 w-4 text-center"></i> 조: 호텔식 / 중: 호핑식 / 석: 무제한 삼겹살</div>
+                        <div class="flex items-center text-indigo-700 md:border-l md:border-gray-200 md:pl-4"><i class="fas fa-bed mr-2 w-4 text-center"></i> 호라이즌 호텔 또는 동급 (5성급)</div>
+                    </div>
+                </div>
+
+                <!-- Day 3 -->
+                <div class="mb-12 bg-gray-50 p-6 md:p-8 rounded-2xl shadow-sm border border-gray-200" data-aos="fade-up">
+                    <div class="border-b border-gray-200 pb-3 mb-6">
+                        <div class="flex flex-wrap items-baseline gap-3">
+                            <h3 class="text-2xl font-black text-blue-800">제3일</h3>
+                            <span class="text-lg font-bold text-gray-700">4월 10일 (목)</span>
+                            <span class="text-sm font-medium text-gray-500 ml-auto bg-white px-3 py-1 rounded-full border border-gray-200">나트랑 ➔ 달랏 이동</span>
+                        </div>
+                    </div>
+                    
+                    <ul class="space-y-6 relative border-l-2 border-gray-300 ml-3 pl-6 mb-6">
+                        <li class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-gray-50 shadow"></span>
+                            <div class="font-bold text-blue-600 text-sm mb-1">오전 투어</div>
+                            <h4 class="font-bold text-lg text-gray-900">달랏 이동 및 명소 탐방</h4>
+                            <p class="text-gray-600 text-sm mt-1">조식 후 달랏으로 차량 이동 (약 3시간 30분 소요). 화려한 색감을 자랑하는 <strong>린푸옥 사원</strong> 및 달랏 최대 사원 <strong>죽림사</strong> 관광 <span class="text-xs text-gray-500">(편도 케이블카 탑승)</span></p>
+                        </li>
+                        <li class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-green-500 border-4 border-gray-50 shadow"></span>
+                            <div class="font-bold text-green-600 text-sm mb-1">오후 액티비티 & 투어</div>
+                            <h4 class="font-bold text-lg text-gray-900">다탄라 폭포 & 랑비앙 전망대</h4>
+                            <p class="text-gray-600 text-sm mt-1">베트남에서 가장 유명한 <strong>다탄라 폭포</strong>에서 스릴만점 레일바이크 탑승. 해발 1,500m <strong>랑비앙 전망대</strong> 짚차 탑승 및 쑤언흐엉 인공호수 관광</p>
+                        </li>
+                        <li class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-indigo-500 border-4 border-gray-50 shadow"></span>
+                            <div class="font-bold text-indigo-600 text-sm mb-1">야간 투어</div>
+                            <h4 class="font-bold text-lg text-gray-900">달랏 야시장</h4>
+                            <p class="text-gray-600 text-sm mt-1">화려한 불빛과 시끌벅적 활기가 넘치는 달랏 최대의 야시장 자유시간. 식사 후 호텔 이동 및 휴식</p>
+                        </li>
+                    </ul>
+                    
+                    <div class="bg-white p-4 rounded-lg flex flex-col md:flex-row gap-4 border border-gray-200 text-sm font-medium mt-4 shadow-sm">
+                        <div class="flex items-center text-orange-700"><i class="fas fa-utensils mr-2 w-4 text-center"></i> 조: 호텔식 / 중: 샤브샤브 / 석: 장어무제한 정식</div>
+                        <div class="flex items-center text-indigo-700 md:border-l md:border-gray-200 md:pl-4"><i class="fas fa-bed mr-2 w-4 text-center"></i> 라달랏 호텔 또는 동급 (5성급)</div>
+                    </div>
+                </div>
+
+                <!-- Day 4 & 5 -->
+                <div class="mb-12 bg-gray-50 p-6 md:p-8 rounded-2xl shadow-sm border border-gray-200" data-aos="fade-up">
+                    <div class="border-b border-gray-200 pb-3 mb-6">
+                        <div class="flex flex-wrap items-baseline gap-3">
+                            <h3 class="text-2xl font-black text-blue-800">제4~5일</h3>
+                            <span class="text-lg font-bold text-gray-700">4월 11일(금) ~ 12일(토)</span>
+                            <span class="text-sm font-medium text-gray-500 ml-auto bg-white px-3 py-1 rounded-full border border-gray-200">달랏 ➔ 나트랑 ➔ 귀국</span>
+                        </div>
+                    </div>
+                    
+                    <ul class="space-y-6 relative border-l-2 border-gray-300 ml-3 pl-6 mb-6">
+                        <li class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-green-500 border-4 border-gray-50 shadow"></span>
+                            <div class="font-bold text-green-600 text-sm mb-1">4일차 오전</div>
+                            <h4 class="font-bold text-lg text-gray-900">달랏 자수 박물관 & 나트랑 이동</h4>
+                            <p class="text-gray-600 text-sm mt-1">한땀한땀 비단실로 짜낸 아름다운 작품을 볼 수 있는 <strong>자수 박물관</strong> 관광 후, 나트랑으로 이동 (약 3시간 30분 소요)</p>
+                        </li>
+                        <li class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-gray-50 shadow"></span>
+                            <div class="font-bold text-blue-600 text-sm mb-1">4일차 오후</div>
+                            <h4 class="font-bold text-lg text-gray-900">나트랑 시내관광 & 전통 마사지</h4>
+                            <p class="text-gray-600 text-sm mt-1">나트랑에서 가장 오래된 <strong>롱손사</strong> 관광. 순전히 돌로 지어진 유럽풍의 <strong>나트랑 대성당</strong> (차창 관광). 모든 일정을 마치고 <strong>베트남 전통 마사지 120분</strong>으로 피로 회복 <span class="text-xs text-gray-500">(팁 $5 별도)</span></p>
+                        </li>
+                        <li class="relative">
+                            <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-gray-800 border-4 border-gray-50 shadow"></span>
+                            <div class="font-bold text-gray-800 text-sm mb-1">공항 이동 및 귀국</div>
+                            <h4 class="font-bold text-lg text-gray-900">깜란 공항 출발 ➔ 인천 도착</h4>
+                            <p class="text-white font-bold text-sm bg-blue-600 inline-block px-3 py-1.5 rounded-lg shadow-sm mt-2">
+                                ✈️ VN440 (21:40 나트랑 출발 ➔ 익일 04:30 인천 도착)
+                            </p>
+                        </li>
+                    </ul>
+                    
+                    <div class="bg-white p-4 rounded-lg flex flex-col gap-2 border border-gray-200 text-sm font-medium mt-4 shadow-sm">
+                        <div class="text-orange-700"><i class="fas fa-utensils mr-2 w-4"></i> 조: 호텔식 / 중: 분짜+반세오 / 석: 닭볶음탕+오징어초무침</div>
+                    </div>
+                </div>
+
+                <!-- 상품 요약 박스 -->
+                <div class="border-2 border-gray-300 p-5 rounded-lg bg-white mb-6">
+                    <h3 class="font-black text-xl mb-3 text-gray-800 flex items-center">
+                        <i class="fas fa-info-circle text-blue-600 mr-2 text-2xl"></i> 상품 요약 안내
+                    </h3>
+                    <ul class="text-base md:text-lg text-gray-800 space-y-2 font-medium">
+                        <li><span class="font-bold text-blue-700">■ 포함사항 :</span> 항공, 여행자보험, 호텔(2인1실), 식사, 전용차량(45인승), 입장료, 가이드(한국/로컬) 및 기사팁</li>
+                        <li><span class="font-bold text-red-600">■ 불포함사항 :</span> 개인경비 및 매너팁 (마사지/호텔 등)</li>
+                        <li><span class="font-bold text-purple-700">■ 쇼핑안내 :</span> 쇼핑 2회 (침향, 커피) / 노옵션</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 추천 영상 Section -->
+        <section id="videos" class="py-16 bg-gray-900 border-t border-gray-800">
+            <div class="container mx-auto px-4 max-w-4xl">
+                <div class="text-center mb-10" data-aos="fade-up">
+                    <h2 class="text-3xl font-bold text-white section-title">미리 만나는 베트남 명소</h2>
+                    <p class="text-gray-400 mt-2 font-medium">나트랑과 달랏의 다채로운 매력을 영상으로 먼저 만나보세요.</p>
+                </div>
+                
+                <div class="bg-black rounded-2xl shadow-2xl overflow-hidden border border-gray-700" data-aos="zoom-in">
+                    <div class="video-wrapper">
+                        <!-- 나트랑/달랏 테마의 고화질 여행 영상 (KBS 여행걸음 등 공신력 있는 영상 추천) -->
+                        <iframe src="https://www.youtube.com/embed/rN81vxD-jcc?rel=0&modestbranding=1" 
+                                title="나트랑 달랏 여행 추천 영상"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-50 pt-12 pb-6 border-t border-gray-200">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-8">
+                    <p class="text-xl font-bold text-gray-600 mb-2">고객만족에 최선을 다하겠습니다. 안전하고 즐거운 여행 되십시오.</p>
+                </div>
+
+                <!-- 투어메이커 공통 Footer 형식 -->
+                <div class="text-center">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" alt="Tourmaker Logo" class="h-8 mx-auto mb-3 opacity-90 object-contain">
+                    <p style="font-size: 13px; color: #6c757d; text-align: center;">
+                        [System Powered by TOURMAKER] 본 스마트 가이드북은 <strong>우리 트래블 코., 엘티디.</strong>의 기획과 <a href="http://tourmaker.kr" target="_blank" style="text-decoration: underline; color: #6c757d; font-weight: bold;">투어메이커</a>의 트래블 테크 기술 제휴로 제작되었습니다.
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <!-- [웹 화면 전용 영역 종료] -->
+
+
+    <!-- =========================================================
+         [1] 인쇄 전용 영역 : 상세 일정표 (body.print-itinerary 시 활성)
+         ========================================================= -->
+    <div id="print-area" class="bg-white text-black font-sans mx-auto">
+        
+        <div class="print-header-block border-b-4 border-black pb-2 mb-2 text-center">
+            <h1 class="text-[20pt] font-black text-center mb-1 tracking-tight">나트랑 & 달랏 3박 5일 일정표</h1>
+            <p class="text-center text-[12pt] text-gray-800 font-bold mb-1 tracking-wide">
+                기간: 2025.04.08(화) ~ 04.12(토) &nbsp;|&nbsp; 인원: 17+1명 &nbsp;|&nbsp; 인솔/가이드: 김효돈님
+            </p>
+            <p class="text-center text-[10.5pt] text-gray-600 mt-1">※ 본 일정표는 항공 및 현지 사정에 의해 변경될 수 있습니다.</p>
+        </div>
+        
+        <!-- 3박 5일 상세 표 -->
+        <table class="w-full border-collapse border-2 border-black shadow-sm">
+            <thead>
+                <tr class="bg-gray-100 text-center">
+                    <th class="border border-gray-400 p-1 w-[8%] font-black">일자</th>
+                    <th class="border border-gray-400 p-1 w-[10%] font-black">지역</th>
+                    <th class="border border-gray-400 p-1 w-[10%] font-black">교통/시간</th>
+                    <th class="border border-gray-400 p-1 w-[56%] font-black">상세일정</th>
+                    <th class="border border-gray-400 p-1 w-[16%] font-black">식사/호텔</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 1일차 -->
+                <tr>
+                    <td class="border border-gray-400 p-2 text-center highlight-print">제1일<br><span class="text-[9pt] font-normal">4/8(화)</span></td>
+                    <td class="border border-gray-400 p-2 text-center highlight-print">인천<br>나트랑</td>
+                    <td class="border border-gray-400 p-2 text-center text-[10pt]">VN441<br>전용차량<br><span class="text-[9pt] font-bold">06:50-09:45</span></td>
+                    <td class="border border-gray-400 p-2">
+                        <ul class="list-disc pl-4 space-y-1 text-[10pt]">
+                            <li>인천 국제공항 출발 ➔ 나트랑 깜란 국제공항 도착 후 가이드 미팅</li>
+                            <li>참파 유적지 중 가장 오래된 <strong>포나가르 탑</strong> 관광</li>
+                            <li>유황성분이 풍부한 <strong>머드 온천</strong> 체험 <span class="text-red-600 font-bold">(수영복/래쉬가드 지참)</span></li>
+                            <li><strong class="text-red-600">베트남 전통 마사지 120분</strong> (팁 $5 별도) 후 호텔 휴식</li>
+                        </ul>
+                    </td>
+                    <td class="border border-gray-400 p-2 text-center text-[10pt] leading-tight">
+                        <span class="text-gray-500">조: 불포함</span><br>
+                        <strong>중: 쌀국수정식</strong><br>
+                        <strong class="text-blue-600">석: 씨푸드뷔페+랍스터</strong><br>
+                        <span class="text-gray-800 font-bold block mt-1 text-[9pt]">호라이즌 호텔</span>
+                    </td>
+                </tr>
+                <!-- 2일차 -->
+                <tr>
+                    <td class="border border-gray-400 p-2 text-center highlight-print">제2일<br><span class="text-[9pt] font-normal">4/9(수)</span></td>
+                    <td class="border border-gray-400 p-2 text-center highlight-print">나트랑</td>
+                    <td class="border border-gray-400 p-2 text-center text-[10pt]">전용차량<br>스피드보트</td>
+                    <td class="border border-gray-400 p-2">
+                        <ul class="list-disc pl-4 space-y-1 text-[10pt]">
+                            <li><strong>에메랄드빛 호핑투어:</strong> 선착장 이동 후 스피드보트로 목선 탑승</li>
+                            <li>스노클링, 낚시, 오션바, 다이빙, 무제한 맥주 & 망고 제공</li>
+                            <li><span class="text-gray-600 text-[9pt]">(해양스포츠 바나나보트, 패러세일링 옵션 진행 가능)</span></li>
+                            <li><strong>나트랑 나이트 투어:</strong> 씨클로 탑승, 야시장, 피자+맥주 체험</li>
+                        </ul>
+                    </td>
+                    <td class="border border-gray-400 p-2 text-center text-[10pt] leading-tight">
+                        <strong>조: 호텔식</strong><br>
+                        <strong>중: 호핑식</strong><br>
+                        <strong class="text-red-600">석: 무제한삼겹살</strong><br>
+                        <span class="text-gray-800 font-bold block mt-1 text-[9pt]">호라이즌 호텔</span>
+                    </td>
+                </tr>
+                <!-- 3일차 -->
+                <tr>
+                    <td class="border border-gray-400 p-2 text-center highlight-print">제3일<br><span class="text-[9pt] font-normal">4/10(목)</span></td>
+                    <td class="border border-gray-400 p-2 text-center highlight-print">나트랑<br>달랏</td>
+                    <td class="border border-gray-400 p-2 text-center text-[10pt]">전용차량</td>
+                    <td class="border border-gray-400 p-2">
+                        <ul class="list-disc pl-4 space-y-1 text-[10pt]">
+                            <li>조식 후 체크아웃. 달랏으로 이동 (약 3시간 30분 소요)</li>
+                            <li>화려한 색감의 <strong>린푸옥 사원</strong> 및 달랏 최대 <strong>죽림사</strong>(케이블카 편도)</li>
+                            <li>베트남 최고 명소 <strong>다탄라 폭포</strong> (레일바이크 탑승)</li>
+                            <li>해발 1,500m <strong>랑비앙 전망대</strong> (짚차 탑승) 및 쑤언흐엉 호수</li>
+                            <li>화려하고 활기 넘치는 <strong>달랏 최대 야시장</strong> 관광</li>
+                        </ul>
+                    </td>
+                    <td class="border border-gray-400 p-2 text-center text-[10pt] leading-tight">
+                        <strong>조: 호텔식</strong><br>
+                        <strong>중: 샤브샤브</strong><br>
+                        <strong class="text-red-600">석: 장어무제한</strong><br>
+                        <span class="text-gray-800 font-bold block mt-1 text-[9pt]">라달랏 호텔</span>
+                    </td>
+                </tr>
+                <!-- 4~5일차 -->
+                <tr>
+                    <td class="border border-gray-400 p-2 text-center highlight-print">제4~5일<br><span class="text-[9pt] font-normal">4/11~12</span></td>
+                    <td class="border border-gray-400 p-2 text-center highlight-print">달랏<br>나트랑<br>인천</td>
+                    <td class="border border-gray-400 p-2 text-center text-[10pt]">전용차량<br>VN440<br><span class="text-[9pt] font-bold">21:40-04:30</span></td>
+                    <td class="border border-gray-400 p-2">
+                        <ul class="list-disc pl-4 space-y-1 text-[10pt]">
+                            <li>비단실의 아름다운 작품 세계 <strong>달랏 자수 박물관</strong> 관광</li>
+                            <li>나트랑 이동 (약 3.5시간). 가장 오래된 사원 <strong>롱손사</strong> 관광</li>
+                            <li>돌로 지어진 유럽풍의 <strong>나트랑 대성당</strong> 차창 관광</li>
+                            <li>여행의 피로를 푸는 <strong class="text-red-600">베트남 전통 마사지 120분</strong> (팁 $5 별도)</li>
+                            <li>석식 후 나트랑 깜란 공항 이동 ➔ 인천국제공항 무사 도착</li>
+                        </ul>
+                    </td>
+                    <td class="border border-gray-400 p-2 text-center text-[10pt] leading-tight">
+                        <strong>조: 호텔식</strong><br>
+                        <strong>중: 분짜+반세오</strong><br>
+                        <strong>석: 닭볶음탕+오징어</strong><br>
+                        <span class="text-gray-500 block mt-1 text-[9pt]">(익일 조식 기내식)</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 하단 푸터 -->
+        <div class="print-footer-block mt-2">
+            <div class="border-2 border-gray-300 rounded-lg bg-gray-50 print-include-box">
+                <p><strong>[포함사항]</strong> 왕복항공권, 5성급호텔, 전일정식사, 차량, 입장료, 마사지 2회(120분), 한국인/로컬 가이드 및 기사 팁</p>
+                <p class="text-red-600"><strong>[불포함사항]</strong> 개인경비, 각종 매너팁 (마사지 팁 $5/회 등)</p>
+            </div>
+            <div class="flex justify-between items-center border-t-2 border-black pt-2 mt-1">
+                <div class="flex items-center gap-2">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" alt="Tourmaker Logo" style="height: 18px;">
+                </div>
+                <span class="text-[9pt] text-gray-500 font-medium">[System Powered by TOURMAKER] 본 스마트 가이드북은 우리 트래블의 기획과 투어메이커의 기술 제휴로 제작되었습니다.</span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- =========================================================
+         [2] 인쇄 전용 영역 : 어르신 맞춤 필수 준비물 (body.print-checklist 시 활성)
+         ========================================================= -->
+    <div id="print-checklist-area" class="bg-white text-black font-sans mx-auto">
+        <div class="border-b-4 border-black pb-3 mb-4 text-center">
+            <h1 class="text-[22pt] font-black text-center mb-2 tracking-tight">✈️ 나트랑 & 달랏 힐링투어 필수 준비물 체크리스트</h1>
+            <p class="text-center text-[13pt] text-gray-800 font-bold mb-1">
+                출발 전 가방을 싸시면서 아래 항목을 펜으로 꼭 체크(✔)해 보시기 바랍니다.
+            </p>
+            <p class="text-center text-[11pt] text-blue-600 mt-1 font-bold">※ 머드 온천 및 호핑 투어 시 수영복(또는 래쉬가드)이 반드시 필요합니다.</p>
+        </div>
+
+        <table class="chk-print-table">
+            <thead>
+                <tr>
+                    <th style="width: 25%;">구 분</th>
+                    <th style="width: 75%;">상 세 확 인 내 역</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="font-bold text-center bg-gray-50">필수 서류 및 환전</td>
+                    <td>
+                        <div><span class="chk-box-print"></span> <strong>여권</strong> (만료일 6개월 이상 필수 / 서명란에 본인 서명 꼭 하세요)</div>
+                        <div style="margin-top:8px;"><span class="chk-box-print"></span> <strong>환전 (베트남 동 VND)</strong> (현지 야시장, 커피 등 개인경비용)</div>
+                        <div style="margin-top:8px;"><span class="chk-box-print"></span> <strong>환전 (미국 달러 $)</strong> (마사지 팁 1회당 $5, 호텔 객실 매너팁 등)</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="font-bold text-center bg-gray-50">의류 및 신발</td>
+                    <td>
+                        <div style="color:#2563eb;"><span class="chk-box-print"></span> <strong>수영복 또는 래쉬가드</strong> (머드 온천 입장 및 호핑투어 시 <strong style="text-decoration: underline;">필수</strong>)</div>
+                        <div style="margin-top:8px;"><span class="chk-box-print"></span> <strong>여름용 반팔 / 반바지</strong> (나트랑은 한낮에 매우 덥습니다)</div>
+                        <div style="margin-top:8px; color:#dc2626;"><span class="chk-box-print"></span> <strong>가을용 겉옷(가디건/바람막이)</strong> (고산지대인 달랏은 아침저녁으로 쌀쌀합니다)</div>
+                        <div style="margin-top:8px;"><span class="chk-box-print"></span> <strong>편안한 운동화 & 아쿠아슈즈</strong> (관광지용 운동화 및 물놀이용 신발)</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="font-bold text-center bg-gray-50">건강 및 상비약</td>
+                    <td>
+                        <div><span class="chk-box-print"></span> <strong>개인 질환약 (혈압/당뇨 등)</strong> (수화물에 부치지 말고 <strong>반드시 기내 소지</strong> 하세요)</div>
+                        <div style="margin-top:8px;"><span class="chk-box-print"></span> <strong>소화제, 지사제(배탈약), 감기약, 멀미약</strong></div>
+                        <div style="margin-top:8px;"><span class="chk-box-print"></span> <strong>모기/벌레 기피제 및 선크림</strong></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="font-bold text-center bg-gray-50">세면 및 기타 용품</td>
+                    <td>
+                        <div><span class="chk-box-print"></span> <strong>자외선 차단 용품</strong> (선크림, 모자, 선글라스, 양산)</div>
+                        <div style="margin-top:8px;"><span class="chk-box-print"></span> <strong>개인 세면도구</strong> (칫솔, 치약, 면도기, 샤워타월 등)</div>
+                        <div style="margin-top:8px;"><span class="chk-box-print"></span> <strong>접이식 우산</strong> (우천 및 강한 자외선 차단 대비)</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top: 20px; border: 2px solid #000; padding: 15px; height: 180px;">
+            <div class="font-bold text-[12pt] mb-2 flex items-center">
+                <span style="font-size: 14pt;">📝</span> 메모 (면세점 구입 품목, 부탁받은 물건 등 자유롭게 적어두세요)
+            </div>
+            <!-- 수기 입력 공간 -->
+        </div>
+
+        <div class="flex justify-between items-center border-t-2 border-black pt-2 mt-4">
+            <div class="flex items-center gap-2">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" alt="Tourmaker Logo" style="height: 18px;">
+            </div>
+            <span class="text-[9pt] text-gray-500 font-medium">안전하고 즐거운 여행 되시길 바랍니다. (김효돈 대표: 010-5115-6118)</span>
+        </div>
+    </div>
+    <!-- [인쇄 전용 (A4) 레이아웃 종료] -->
+
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        AOS.init({ once: true, offset: 50, duration: 800 });
+
+        // [1] 일정표 인쇄 호출 함수
+        function triggerPrintItinerary() {
+            var userAgent = navigator.userAgent.toLowerCase();
+            if(userAgent.indexOf('kakaotalk') > -1) {
+                alert('카카오톡 내부 브라우저에서는 인쇄 기능이 제한되어 있습니다.\n화면 우측 하단의 메뉴(⋮)를 눌러 [다른 브라우저로 열기(크롬/사파리)]를 선택하신 후 다시 인쇄를 눌러주세요.');
+                return;
+            }
+            try {
+                document.body.classList.remove('print-checklist');
+                document.body.classList.add('print-itinerary');
+                setTimeout(function() { window.print(); }, 300);
+            } catch (e) {
+                alert("인쇄 기능을 지원하지 않는 환경입니다.");
+            }
+        }
+
+        // [2] 준비물 체크리스트 전용 인쇄 호출 함수
+        function triggerPrintChecklist() {
+            var userAgent = navigator.userAgent.toLowerCase();
+            if(userAgent.indexOf('kakaotalk') > -1) {
+                alert('카카오톡 내부 브라우저에서는 인쇄 기능이 제한되어 있습니다.\n화면 우측 하단의 메뉴(⋮)를 눌러 [다른 브라우저로 열기(크롬/사파리)]를 선택하신 후 다시 인쇄를 눌러주세요.');
+                return;
+            }
+            try {
+                document.body.classList.remove('print-itinerary');
+                document.body.classList.add('print-checklist');
+                setTimeout(function() { window.print(); }, 300);
+            } catch (e) {
+                alert("인쇄 기능을 지원하지 않는 환경입니다.");
+            }
+        }
+
+        // --- D-Day 로직 ---
+        function updateDday() {
+            const targetDate = new Date('2026-04-08T00:00:00+09:00'); // 출발일 기준 (올해로 가정)
+            const now = new Date();
+            const diffTime = targetDate - now;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            let text = "";
+            if (diffDays > 0) text = `출발 D-${diffDays}`;
+            else if (diffDays === 0) text = "오늘 출발합니다!";
+            else text = "즐거운 여행 되셨나요?";
+
+            document.getElementById('nav-dday-main').innerText = text;
+        }
+        updateDday();
+        setInterval(updateDday, 1000 * 60 * 60);
+
+        // --- 체크리스트 & 메모장 LocalStorage 로직 ---
+        document.addEventListener("DOMContentLoaded", () => {
+            const memoInput = document.getElementById('userMemo');
+            if (memoInput) {
+                memoInput.value = localStorage.getItem('nhatrang_dalat_memo_2026') || '';
+                memoInput.addEventListener('input', (e) => {
+                    localStorage.setItem('nhatrang_dalat_memo_2026', e.target.value);
+                });
+            }
+
+            const checkboxes = document.querySelectorAll('.checklist-cb');
+            checkboxes.forEach(cb => {
+                const savedState = localStorage.getItem('nhatrang_dalat_chk_' + cb.id);
+                if (savedState === 'true') cb.checked = true;
+                
+                cb.addEventListener('change', (e) => {
+                    localStorage.setItem('nhatrang_dalat_chk_' + e.target.id, e.target.checked);
+                });
+            });
+            
+            // 지도 초기화 함수 호출
+            initMap();
+        });
+
+
+        // ==========================================
+        // 지도 관련 로직 (Leaflet.js)
+        // ==========================================
+        let map;
+        let routeLayerGroup;
+
+        // 나트랑 & 달랏 주요 거점 좌표 (모든 방문지 상세 반영)
+        const loc = {
+            airport: { lat: 11.9981, lng: 109.2195, name: "깜란 국제공항", emoji: "✈️", type: "airport" },
+            hotel_nt: { lat: 12.2754, lng: 109.2017, name: "호라이즌 호텔", emoji: "🏨", type: "hotel" },
+            ponagar: { lat: 12.2653, lng: 109.1958, name: "포나가르 탑", emoji: "🛕", type: "tour" },
+            mudbath: { lat: 12.2850, lng: 109.1830, name: "머드 온천", emoji: "♨️", type: "tour" },
+            massage: { lat: 12.2450, lng: 109.1900, name: "전통 마사지", emoji: "💆", type: "tour" },
+            hopping: { lat: 12.1800, lng: 109.2500, name: "호핑투어", emoji: "🚤", type: "tour" },
+            nightmarket_nt: { lat: 12.2418, lng: 109.1955, name: "나트랑 야시장", emoji: "🏮", type: "tour" },
+            hotel_dl: { lat: 11.9566, lng: 108.4526, name: "라달랏 호텔", emoji: "🏨", type: "hotel" },
+            linhphuoc: { lat: 11.9443, lng: 108.4998, name: "린푸옥 사원", emoji: "🏯", type: "tour" },
+            truclam: { lat: 11.9038, lng: 108.4355, name: "죽림사", emoji: "🧘", type: "tour" },
+            datanla: { lat: 11.9023, lng: 108.4492, name: "다탄라 폭포", emoji: "🎢", type: "tour" },
+            langbiang: { lat: 12.0478, lng: 108.4312, name: "랑비앙 전망대", emoji: "⛰️", type: "tour" },
+            xuanhuong: { lat: 11.9416, lng: 108.4475, name: "쑤언흐엉 호수", emoji: "🦢", type: "tour" },
+            nightmarket_dl: { lat: 11.9424, lng: 108.4365, name: "달랏 야시장", emoji: "🍢", type: "tour" },
+            embroidery: { lat: 11.9560, lng: 108.4468, name: "자수 박물관", emoji: "🧵", type: "tour" },
+            longson: { lat: 12.2504, lng: 109.1804, name: "롱손사", emoji: "🕍", type: "tour" },
+            cathedral: { lat: 12.2468, lng: 109.1881, name: "나트랑 대성당", emoji: "⛪", type: "tour" }
+        };
+
+        // 탭별 동선 데이터 구성 (일자별 세밀한 노선)
+        const routeData = {
+            'all': {
+                path: [
+                    loc.airport, loc.ponagar, loc.mudbath, loc.massage, loc.hotel_nt, 
+                    loc.hopping, loc.nightmarket_nt, loc.hotel_nt,
+                    loc.linhphuoc, loc.truclam, loc.datanla, loc.langbiang, loc.xuanhuong, loc.nightmarket_dl, loc.hotel_dl, 
+                    loc.embroidery, loc.longson, loc.cathedral, loc.massage, loc.airport
+                ],
+                text: "전체 여정: 나트랑(휴양) ➔ 달랏(고산) ➔ 나트랑 귀환",
+                dashArray: null
+            },
+            'day1': {
+                path: [loc.airport, loc.ponagar, loc.mudbath, loc.massage, loc.hotel_nt],
+                text: "1일차: 깜란 공항 ➔ 포나가르 탑 ➔ 머드 온천 ➔ 마사지 ➔ 호텔",
+                dashArray: '5, 5'
+            },
+            'day2': {
+                path: [loc.hotel_nt, loc.hopping, loc.nightmarket_nt, loc.hotel_nt],
+                text: "2일차: 호텔 ➔ 에메랄드 호핑 투어 ➔ 나트랑 야시장 ➔ 숙소",
+                dashArray: null 
+            },
+            'day3': {
+                path: [loc.hotel_nt, loc.linhphuoc, loc.truclam, loc.datanla, loc.langbiang, loc.xuanhuong, loc.nightmarket_dl, loc.hotel_dl],
+                text: "3일차: (달랏이동) 린푸옥 ➔ 죽림사 ➔ 다탄라 ➔ 랑비앙 ➔ 호수 ➔ 야시장",
+                dashArray: null
+            },
+            'day4': {
+                path: [loc.hotel_dl, loc.embroidery, loc.longson, loc.cathedral, loc.massage, loc.airport],
+                text: "4일차: 달랏 자수박물관 ➔ (나트랑) 롱손사 ➔ 대성당 ➔ 마사지 ➔ 공항",
+                dashArray: null
+            }
+        };
+
+        function initMap() {
+            // 기본 지도 세팅 (나트랑-달랏 중심)
+            map = L.map('routeMap').setView([12.1, 108.8], 9);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            routeLayerGroup = L.layerGroup().addTo(map);
+            
+            setTimeout(() => {
+                drawMapRoute('all');
+            }, 100);
+        }
+
+        function createCustomIcon(emoji, type) {
+            let colorClass = '';
+            if (type === 'hotel') colorClass = 'hotel';
+            else if (type === 'airport') colorClass = 'airport';
+
+            return L.divIcon({
+                className: 'custom-div-icon',
+                html: `<div class="custom-map-marker ${colorClass}">${emoji}</div>`,
+                iconSize: [32, 32],
+                iconAnchor: [16, 16]
+            });
+        }
+
+        function drawMapRoute(dayKey) {
+            document.querySelectorAll('.map-tab').forEach(el => el.classList.remove('active', 'bg-blue-900', 'text-white'));
+            const activeBtn = document.getElementById('tab-' + dayKey);
+            if(activeBtn) activeBtn.classList.add('active');
+
+            routeLayerGroup.clearLayers();
+
+            const data = routeData[dayKey];
+            const pathCoords = [];
+
+            document.getElementById('mapSummaryText').innerText = data.text;
+
+            const isAll = dayKey === 'all';
+
+            data.path.forEach((point) => {
+                const latLng = [point.lat, point.lng];
+                pathCoords.push(latLng);
+
+                const marker = L.marker(latLng, {
+                    icon: createCustomIcon(point.emoji, point.type)
+                }).addTo(routeLayerGroup);
+
+                marker.bindTooltip(point.name, {
+                    permanent: true, 
+                    direction: 'top',
+                    offset: [0, -12],
+                    className: 'font-bold text-[10px] md:text-xs bg-white/90 border border-blue-200 rounded px-1.5 py-0.5 shadow-sm text-gray-800 whitespace-nowrap'
+                }).openTooltip();
+            });
+            
+            const bounds = L.latLngBounds(pathCoords);
+
+            if (pathCoords.length > 1) {
+                L.polyline(pathCoords, {
+                    color: '#3b82f6',
+                    weight: isAll ? 2 : 4, // 전체 여정일 때는 선 굵기를 얇게 조절하여 가독성 확보
+                    opacity: isAll ? 0.6 : 0.8,
+                    dashArray: data.dashArray 
+                }).addTo(routeLayerGroup);
+            }
+
+            setTimeout(() => {
+                map.invalidateSize();
+                const mapSize = map.getSize();
+                if (mapSize.x > 0 && mapSize.y > 0 && bounds.isValid()) {
+                    map.flyToBounds(bounds, { padding: [40, 40], duration: 1.5, maxZoom: isAll ? 9 : 13 });
+                }
+            }, 400);
+        }
+    </script>
+</body>
+</html>
